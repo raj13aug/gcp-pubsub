@@ -76,11 +76,11 @@ resource "google_project_iam_member" "permissions_am" {
   member = "serviceAccount:${google_service_account.default.email}"
 }
 
-resource "google_service_account_key" "vault_gcp_tests" {
+resource "google_service_account_key" "gcp_tests" {
   service_account_id = google_service_account.default.name
 }
 
-resource "local_file" "vault_gcp_tests" {
-  content  = base64decode(google_service_account_key.vault_gcp_tests.private_key)
-  filename = "${path.module}/vault-tester.json"
+resource "local_file" "gcp_tests_store" {
+  content  = base64decode(google_service_account_key.gcp_tests.private_key)
+  filename = "${path.module}/tester.json"
 }
