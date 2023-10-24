@@ -11,7 +11,7 @@ terraform {
 
 
 provider "google" {
-  project = "engineer-cloud-nprod"
-  region  = "us-central1"
-  zone    = "us-central1-c"
+  project = var.project_id
+  region  = var.region
+  zone    = var.zone
 }
