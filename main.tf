@@ -69,17 +69,18 @@ resource "google_service_account" "default" {
 resource "google_project_iam_member" "permissions_am" {
   project = var.fun_project_id
   for_each = toset([
-    "roles/bigquery.dataEditor",
-    "roles/cloudfunctions.invoker",
-    "roles/run.invoker",
     "roles/cloudsql.admin",
-    "roles/cloudsql.client",
-    "roles/cloudsql.editor",
-    "roles/logging.admin",
-    "roles/logging.logWriter",
-    "roles/pubsub.publisher",
-    "roles/bigquery.admin"
+    "roles/pubsub.admin"
   ])
   role   = each.key
   member = "serviceAccount:${google_service_account.default.email}"
+}
+
+resource "google_service_account_key" "vault_gcp_tests" {
+  service_account_id = google_service_account.default.name
+}
+
+resource "local_file" "vault_gcp_tests" {
+  content  = base64decode(google_service_account_key.vault_gcp_tests.private_key)
+  filename = "${path.module}/vault-tester.json"
 }
