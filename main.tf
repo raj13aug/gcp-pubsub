@@ -67,7 +67,7 @@ resource "google_service_account" "default" {
 
 //permission
 resource "google_project_iam_member" "permissions_am" {
-  project = var.fun_project_id
+  project = var.project_id
   for_each = toset([
     "roles/cloudsql.admin",
     "roles/pubsub.admin"
