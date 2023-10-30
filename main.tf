@@ -60,10 +60,14 @@ resource "google_pubsub_subscription" "example" {
   enable_message_ordering = false
 }
 
+
 resource "google_service_account" "default" {
-  account_id   = lower(var.service_account.account_id)
-  display_name = lower(var.service_account.display_name)
+  project      = var.project
+  account_id   = var.sa_pubsub
+  display_name = "Runtime SA for PubSub Push Subscription for pipeline"
 }
+
+
 
 //permission
 resource "google_project_iam_member" "permissions_am" {
