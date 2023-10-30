@@ -16,7 +16,26 @@ variable "zone" {
   default     = "us-central1-c"
 }
 
+variable "account_id" {
+  description = "The service account ID. Changing this forces a new service account to be created."
+}
 
+variable "description" {
+  description = "The display name for the service account. Can be updated without creating a new resource."
+  default     = "managed-by-terraform"
+}
+
+variable "roles" {
+  type        = list(string)
+  description = "The roles that will be granted to the service account."
+  default     = []
+}
+
+variable "gcp_service_list" {
+  type        = list(string)
+  description = "The list of apis necessary for the project"
+  default     = []
+}
 
 /* Required */
 variable "topic_name" {
@@ -40,23 +59,7 @@ variable "retention" {
   description = "How long the topic should retain messages for. Default is 7 days."
 }
 
-# variable "pub_sub" {
-#   description = "variable to create pub-sub"
-#   type = list(object({
-#     topic      = string
-#     project_id = string
-#     custom_sa  = string
-#     pull_subscriptions = list(object({
-#       name                         = string
-#       dead_letter_topic            = string
-#       ack_deadline_seconds         = string
-#       max_delivery_attempts        = string
-#       enable_exactly_once_delivery = bool
-#       message_retention_duration   = string
-#       //   service_account              = string
-#       expiration_policy = list(object({
-#         ttl = string
-#       }))
-#     }))
-#   }))
-# }
+
+variable "terraform_service_account" {
+  type = string
+}

@@ -61,27 +61,32 @@ resource "google_pubsub_subscription" "example" {
 }
 
 
-resource "google_service_account" "default" {
-  project      = var.project
-  account_id   = var.sa_pubsub
-  display_name = "Runtime SA for PubSub Push Subscription for pipeline"
+######################Service Account#################################
+
+resource "google_service_account" "sa" {
+  project      = var.project_id
+  account_id   = var.account_id
+  display_name = var.description
+
+  depends_on = [
+    google_project_service.enabled_apis,
+  ]
 }
 
+resource "google_project_iam_member" "sa_iam" {
+  for_each = toset(var.roles)
 
-
-//permission
-resource "google_project_iam_member" "permissions_am" {
   project = var.project_id
-  for_each = toset([
-    "roles/cloudsql.admin",
-    "roles/pubsub.admin"
-  ])
-  role   = each.key
-  member = "serviceAccount:${google_service_account.default.email}"
+  role    = each.value
+  member  = "serviceAccount:${google_service_account.sa.email}"
+
+  depends_on = [
+    google_project_service.enabled_apis,
+  ]
 }
 
 resource "google_service_account_key" "gcp_tests" {
-  service_account_id = google_service_account.default.name
+  service_account_id = google_service_account.sa.name
 }
 
 resource "local_file" "gcp_tests_store" {
