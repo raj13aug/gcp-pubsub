@@ -58,8 +58,3 @@ variable "retention" {
   default     = "604800s"
   description = "How long the topic should retain messages for. Default is 7 days."
 }
-
-
-variable "terraform_service_account" {
-  type = string
-}
